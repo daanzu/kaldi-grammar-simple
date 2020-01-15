@@ -14,7 +14,7 @@ def _safely(*funcs):
 def coroutine(func):
     def start(*args,**kwargs):
         cr = func(*args,**kwargs)
-        cr.next()
+        next(cr)
         return cr
     return start
 
@@ -71,8 +71,11 @@ class State(object):
         else:
             self.timeout_time = None
 
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.state)
+        # value = self.state
+        # return bool(value != False and value != None)
+    __nonzero__ = __bool__  # PY2 compatibility
 
     def set(self, value=True):
         initial_value = self.state
@@ -117,13 +120,14 @@ class MultiMode:
 
     def __str__(self):
         return self._str
-    def __nonzero__(self):
+    def __bool__(self):
         return bool(self.level)
+    __nonzero__ = __bool__  # PY2 compatibility
     def __call__(self):
         return self.pump()
 
     def _active_level(self):
-        return max([None] + filter(lambda level: level <= self.level, self.levels.keys()))
+        return max([None] + [level for level in list(self.levels.keys()) if level <= self.level])
 
     def _active_fire_func(self):
         if self._active_level(): return self.levels[self._active_level()]
@@ -173,7 +177,7 @@ class MultiMode:
                 self.thread_coro = None
             if self.rule:
                 _safely(lambda: self.rule.disable())
-            active_instances = sorted(filter(None, self.instances), key=lambda m: m.active_time)
+            active_instances = sorted([_f for _f in self.instances if _f], key=lambda m: m.active_time)
             MultiMode.current = active_instances[-1] if active_instances else None
             if self.transition_func:
                 _safely(lambda: self.transition_func.__func__())
@@ -196,7 +200,7 @@ class MultiMode:
         for mode in cls.instances:
             if mode.thread_coro and mode.level:
                 try:
-                    mode.thread_coro.next()
+                    next(mode.thread_coro)
                 except StopIteration as e:
                     _safely(lambda: mode.release())
                 except Exception as e:
