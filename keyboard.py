@@ -304,6 +304,8 @@ grammarCfg.cmd.map = Item(
         "underscore [<n>]": Key("underscore/2:%(n)d"),
         "<letters>": Text("%(letters)s"),
         "<char>": Text("%(char)s"),
+        "<modifierSingle> <letters>": Key("%(modifierSingle)s:down") + Text("%(letters)s") + Key("%(modifierSingle)s:up"),
+        "<modifierSingle> <char>": Key("%(modifierSingle)s:down") + Text("%(char)s") + Key("%(modifierSingle)s:up"),
 
         'langle [<n>]': Key('langle:%(n)d'),
         'lace [<n>]':   Key('lbrace:%(n)d'),
