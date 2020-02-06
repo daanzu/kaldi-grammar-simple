@@ -127,7 +127,8 @@ class MultiMode:
         return self.pump()
 
     def _active_level(self):
-        return max([None] + [level for level in list(self.levels.keys()) if level <= self.level])
+        active_levels = [level for level in self.levels.keys() if level <= self.level]
+        return None if not active_levels else max(active_levels)
 
     def _active_fire_func(self):
         if self._active_level(): return self.levels[self._active_level()]
