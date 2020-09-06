@@ -1,9 +1,12 @@
 
 ## Getting Started
 
-1. Clone
-1. Download Kaldi model to directory
-1. Run `kaldi_module_loader_plus.py`
+1. Clone this repo: `git clone https://github.com/daanzu/kaldi-grammar-simple.git`
+1. Change to directory: `cd kaldi-grammar-simple`
+1. Install dragonfly with Kaldi backend and necessary dependencies: `pip install dragonfly2[kaldi]`
+    * See the [dragonfly documentation](https://dragonfly2.readthedocs.io/en/latest/kaldi_engine.html#setup) for details on installation
+1. Download a Kaldi speech model from [KaldiAG releases](https://github.com/daanzu/kaldi-active-grammar/releases) and unzip it
+1. Run `python kaldi_module_loader_plus.py`
 
 ## Other Software Helpful With Voice
 
